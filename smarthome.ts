@@ -417,7 +417,7 @@ namespace smarthome {
     //% blockId="readdht11" block="DHT11 sensor %Rjpin %dht11state value"
     //% Rjpin.fieldEditor="gridpicker" dht11state.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2 dht11state.fieldOptions.columns=1
-    export function dht11Sensor(dht11state: DHT11_state): number {
+    export function dht11Sensor(pins:DigitalPin,dht11state: DHT11_state): number {
         //initialize
         basic.pause(1100)
         let _temperature: number = -999.0
@@ -426,8 +426,7 @@ namespace smarthome {
         let checksumTmp: number = 0
         let dataArray: boolean[] = []
         let resultArray: number[] = []
-        let pin = DigitalPin.P1
-        pin = DigitalPin.P1
+        let pin = pins
         for (let index = 0; index < 40; index++) dataArray.push(false)
         for (let index = 0; index < 5; index++) resultArray.push(0)
 

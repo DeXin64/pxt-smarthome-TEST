@@ -429,10 +429,10 @@ namespace smarthome {
         for (let index = 0; index < 40; index++) dataArray.push(false)
         for (let index = 0; index < 5; index++) resultArray.push(0)
 
-        
+
         pins.setPull(pin, PinPullMode.PullUp)
         pins.digitalWritePin(pin, 0) //begin protocol, pull down pin
-        basic.pause(18)
+        basic.pause(25)
         pins.digitalReadPin(pin) //pull up pin
         control.waitMicros(40)
         while (pins.digitalReadPin(pin) == 0); //sensor response

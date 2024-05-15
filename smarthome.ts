@@ -458,10 +458,11 @@ namespace smarthome {
         if (checksumTmp >= 256) checksumTmp -= 256
         switch (dht11state) {
             case DHT11_state.DHT11_temperature_C:
-                _temperature = resultArray[2] + resultArray[3] / 100
+                _temperature = resultArray[2] * 256 + resultArray[3]
+                _temperature /= 10.0
                 return _temperature
             case DHT11_state.DHT11_humidity:
-                _humidity = resultArray[0] + resultArray[1] / 100
+                _humidity = resultArray[0] * 256 + resultArray[1]
                 return _humidity
         }
         return 0

@@ -1,6 +1,6 @@
 {
     "name": "smarthome-kit",
-    "version": "2.2.11",
+    "version": "2.2.12",
     "description": "ELECFREAKS Smart Home Kit",
     "license": "MIT",
     "dependencies": {

@@ -357,10 +357,10 @@ namespace smarthome {
                 return 0
         }
     }
-        /**
-    * TODO: Detect soil moisture value(0~100%)
-    * @param soilmoisturepin describe parameter here, eg: DigitalRJPin.J1
-    */
+    /**
+* TODO: Detect soil moisture value(0~100%)
+* @param soilmoisturepin describe parameter here, eg: DigitalRJPin.J1
+*/
     //% blockId="PIR" block="PIR sensor %pin detects motion"
     export function PIR(pin: DigitalPin): boolean {
         if (pins.digitalReadPin(pin) == 1) {
@@ -405,19 +405,28 @@ namespace smarthome {
     }
 
     //% blockId="readmq3" block="Alcohol sensor %pin value(0~100)"
-    export function mq3(pin:AnalogPin): number {
+    export function mq3(pin: AnalogPin): number {
         let mq3_value = pins.analogReadPin(pin);
-        if (mq3_value > 1000){
+        if (mq3_value > 1000) {
             mq3_value = 1000
         }
-        let mq3_value_map = pins.map(mq3_value,0,1000,0,100)
+        let mq3_value_map = pins.map(mq3_value, 0, 1000, 0, 100)
         return Math.round(mq3_value_map);
     }
 
+    function waitPinState(pin: DigitalPin, state: number, timeoutUs: number): boolean {
+        let timeout = input.runningTimeMicros() + timeoutUs
+        while (pins.digitalReadPin(pin) != state) {
+            if (input.runningTimeMicros() > timeout) {
+                return 0 //timeout
+            }
+        }
+        return 1
+    }
     //% blockId="readdht11" block="DHT11 sensor %Rjpin %dht11state value"
     //% Rjpin.fieldEditor="gridpicker" dht11state.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2 dht11state.fieldOptions.columns=1
-    export function dht11Sensor(pin:DigitalPin,dht11state: DHT11_state): number {
+    export function dht11Sensor(pin: DigitalPin, dht11state: DHT11_state): number {
         //initialize
         basic.pause(1100)
         let _temperature: number = -999.0
@@ -435,13 +444,15 @@ namespace smarthome {
         basic.pause(25)
         pins.digitalReadPin(pin) //pull up pin
         control.waitMicros(40)
+
         while (pins.digitalReadPin(pin) == 0); //sensor response
         while (pins.digitalReadPin(pin) == 1); //sensor response
-
+        if (!waitPinState(pin, 1, 1000)) return 0
+        if (!waitPinState(pin, 0, 1000)) return 0
         //read data (5 bytes)
         for (let index = 0; index < 40; index++) {
-            while (pins.digitalReadPin(pin) == 1);
-            while (pins.digitalReadPin(pin) == 0);
+            if (!waitPinState(pin, 0, 1000)) return 0
+            if (!waitPinState(pin, 1, 1000)) return 0
             control.waitMicros(28)
             //if sensor still pull up data pin after 28 us it means 1, otherwise 0
             if (pins.digitalReadPin(pin) == 1) dataArray[index] = true

@@ -413,16 +413,26 @@ namespace smarthome {
         let mq3_value_map = pins.map(mq3_value, 0, 1000, 0, 100)
         return Math.round(mq3_value_map);
     }
-
+    // function waitPinState(pin: DigitalPin, state: number, timeoutUs: number): boolean {
+    //     if(pins.digitalReadPin(pin) == state)
+    //     {
+    //         return true
+    //     }
+    //     let timeout = input.runningTimeMicros() + timeoutUs
+    //     while (pins.digitalReadPin(pin) != state) {
+    //         if (input.runningTimeMicros() > timeout) {
+    //             return false //timeout
+    //         }
+    //     }
+    //     return true
+    // }
+    let count = 0
     function waitPinState(pin: DigitalPin, state: number, timeoutUs: number): boolean {
-        if(pins.digitalReadPin(pin) == state)
-        {
-            return true
-        }
-        let timeout = input.runningTimeMicros() + timeoutUs
         while (pins.digitalReadPin(pin) != state) {
-            if (input.runningTimeMicros() > timeout) {
-                return false //timeout
+            count++;
+            if (count > 50) {
+                count = 0
+                return false
             }
         }
         return true

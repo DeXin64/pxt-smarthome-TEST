@@ -415,6 +415,10 @@ namespace smarthome {
     }
 
     function waitPinState(pin: DigitalPin, state: number, timeoutUs: number): boolean {
+        if(pins.digitalReadPin(pin) == state)
+        {
+            return true
+        }
         let timeout = input.runningTimeMicros() + timeoutUs
         while (pins.digitalReadPin(pin) != state) {
             if (input.runningTimeMicros() > timeout) {

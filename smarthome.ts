@@ -418,10 +418,10 @@ namespace smarthome {
         let timeout = input.runningTimeMicros() + timeoutUs
         while (pins.digitalReadPin(pin) != state) {
             if (input.runningTimeMicros() > timeout) {
-                return 0 //timeout
+                return false //timeout
             }
         }
-        return 1
+        return true
     }
     //% blockId="readdht11" block="DHT11 sensor %Rjpin %dht11state value"
     //% Rjpin.fieldEditor="gridpicker" dht11state.fieldEditor="gridpicker"

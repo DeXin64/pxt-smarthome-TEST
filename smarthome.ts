@@ -447,12 +447,12 @@ namespace smarthome {
 
         while (pins.digitalReadPin(pin) == 0); //sensor response
         while (pins.digitalReadPin(pin) == 1); //sensor response
-        if (!waitPinState(pin, 1, 1000)) return 0
-        if (!waitPinState(pin, 0, 1000)) return 0
+        if (!waitPinState(pin, 1, 2000)) return 0
+        if (!waitPinState(pin, 0, 2000)) return 0
         //read data (5 bytes)
         for (let index = 0; index < 40; index++) {
-            if (!waitPinState(pin, 0, 1000)) return 0
-            if (!waitPinState(pin, 1, 1000)) return 0
+            if (!waitPinState(pin, 0, 2000)) return 0
+            if (!waitPinState(pin, 1, 2000)) return 0
             control.waitMicros(28)
             //if sensor still pull up data pin after 28 us it means 1, otherwise 0
             if (pins.digitalReadPin(pin) == 1) dataArray[index] = true
